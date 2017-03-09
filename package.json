@@ -1,0 +1,16 @@
+{
+  "name": "openfresh.github.io",
+  "version": "0.0.1",
+  "engines": {
+    "node": ">=6.9.4"
+  },
+  "description": "OpenFRESH API Document",
+  "author": "CyberAgent, Inc.",
+  "scripts": {
+    "gendoc": "aglio -i README.md -o index.html",
+    "serve": "aglio -i README.md --server" 
+  },
+  "dependencies": {
+    "aglio": "^2.3.0"
+  }
+}

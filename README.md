@@ -6,15 +6,14 @@ HOST: https://openapi.freshlive.tv
 OpenFRESHは生放送動画配信プラットフォーム [FRESH!](https://freshlive.tv) を便利に利用するための開発者向けプロジェクトです。
 
 ## 現在β公開中
-現在、OpenFRESH APIはβ公開中であり、FRESH!の配信用アカウントを保持しているユーザーにのみ開放されています。
-エンドポイントは `https://openapi.freshlive.tv` です。
+現在、OpenFRESH APIはβ公開中です。一部のAPIにはアクセストークンが必要ですが、FRESH!の配信用アカウントを保持しているユーザーであればアクセストークンを取得することができます。
 
-また、β公開中はAPIのスキーマが変わることもありますのでご注意ください。
+エンドポイントは `https://openapi.freshlive.tv` です。
 
 
 ## Group 認証
 
-OpenFRESH APIを利用するには、まずアクセストークンを取得する必要があり、アクセストークンの取得はFRESH!のアカウント（現在は配信主アカウントのみ）のログインアカウントを利用する必要がある。
+認証が必要なAPIを利用するにはアクセストークンが必要となる。アクセストークンの取得はFRESH!のアカウント（現在は配信主アカウントのみ）のログインアカウントを利用する必要がある。
 
 ## OAuth [/v1/oauth/token]
 
@@ -41,14 +40,18 @@ OpenFRESH APIを利用するためのアクセストークンを取得する。J
 
 ### リクエストヘッダ
 
-OpenFRESH APIへのリクエストは基本的にアクセストークンが必須となっている（アクセストークン取得APIを除いて）。`Authorization` リクエストヘッダを必ず付与するようにし、前述で取得したアクセストークンを以下のように設定する。
+コメント投稿APIのような認証が必要なAPIには `Authorization` リクエストヘッダを必ず付与するようにし、前述で取得したアクセストークンを以下のように設定する。
 
 ```bash
-$ curl -X GET \
-    -H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2IiwiZXhwx3oxNTE5OTc3Mjk1LCJzdGF0dXMiOiJicm9hZGNhc3QifQ.sTyTldvZ9H95ZsJfzMDUH2YgNGd3wYKV926tR90OjA2' \
-    'https://openapi.freshlive.tv/v1/comments?programId=91633&limit=10&sinceMillisecond=0'
+$ curl -X POST \
+-H 'Authorization: Bearer eyJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2IiwiZXhwx3oxNTE5OTc3Mjk1LCJzdGF0dXMiOiJicm9hZGNhc3QifQ.sTyTldvZ9H95ZsJfzMDUH2YgNGd3wYKV926tR90OjA' \
+-H 'Content-Type: application/json' \
+-d '{
+  "programId": "70375",
+  "comment": "hello!"
+}' \
+'https://openapi.freshlive.tv/v1/comments'
 ```
-
 
 ## Group コメント
 
@@ -56,11 +59,7 @@ $ curl -X GET \
 
 ### コメントの取得 [GET]
 
-番組のコメントを取得します。
-
-+ Request
-    + Headers
-        Authorization: Bearer 取得したアクセストークン
+番組のコメントを取得します。生放送中はレスポンスの`meta.sinceMillisecond`に番組開始からの時間が含まれるので、これを次回のAPIリクエストの`sinceMillisecond`に指定するような実装をすると継続的にコメントを取得することができます。
 
 + Parameters
 
@@ -124,7 +123,10 @@ $ curl -X GET \
 
     + Body
 
-        {}
+        {
+          "meta": {},
+          "data": {}
+        }
 
 + Response 403 (application/json)
 
@@ -146,7 +148,7 @@ $ curl -X GET \
 
 ### RateLimit
 
-OpenFRESH APIにRateLimit（時間単位でのAPIコール数制限）が設定されています。現在は1ユーザーあたり**60回/1分**の制限を設けており、それを越えるAPIの利用をした場合は`HTTP 429 Too Many Requests`を返します。
+OpenFRESH APIにRateLimit（時間単位でのAPIコール数制限）が設定されています。現在は1ホストまたは1ユーザーあたり**60回/1分**の制限を設けており、それを越えるAPIの利用をした場合は`HTTP 429 Too Many Requests`を返します。
 RateLimitに達した場合は少し待ってからAPIリクエストをし、直近1分間のリクエスト数が60回を超えないような制御をする必要があります。
 
 

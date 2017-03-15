@@ -3,6 +3,8 @@ HOST: https://openapi.freshlive.tv
 
 # OpenFRESH
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/openfresh/openfresh.github.io.svg)](https://greenkeeper.io/)
+
 OpenFRESHは生放送動画配信プラットフォーム [FRESH!](https://freshlive.tv) を便利に利用するための開発者向けプロジェクトです。
 
 ## 現在β公開中

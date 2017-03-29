@@ -59,7 +59,7 @@ $ curl -X POST \
 
 ### コメントの取得 [GET]
 
-番組のコメントを取得します。生放送中はレスポンスの`meta.sinceMillisecond`に番組開始からの時間が含まれるので、これを次回のAPIリクエストの`sinceMillisecond`に指定するような実装をすると継続的にコメントを取得することができます。
+番組のコメントを取得します。生放送中はレスポンスの`meta.nowMillisecond`に番組開始からの時間が含まれるので、これを次回のAPIリクエストの`sinceMillisecond`に指定するような実装をすると継続的にコメントを取得することができます。
 番組のprogramIdを指定する必要があり、`programId`は番組URLの以下の部分を指しています。
 
 ![programId](img/openfresh_api01.png)

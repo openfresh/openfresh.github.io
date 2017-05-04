@@ -1,7 +1,7 @@
 FORMAT: 1A
 HOST: https://openapi.freshlive.tv
 
-# OpenFRESH
+# OpenFRESH (β公開中)
 
 OpenFRESHは生放送動画配信プラットフォーム [FRESH!](https://freshlive.tv) を便利に利用するための開発者向けプロジェクトです。
 
@@ -9,6 +9,16 @@ OpenFRESHは生放送動画配信プラットフォーム [FRESH!](https://fresh
 現在、OpenFRESH APIはβ公開中です。一部のAPIにはアクセストークンが必要ですが、FRESH!の配信用アカウントを保持しているユーザーであればアクセストークンを取得することができます。
 
 エンドポイントは `https://openapi.freshlive.tv` です。
+
+## Group 更新履歴
+
+### 2017.05.05
+* FRESH!のアップデートにより、ユーザー名を記名したコメントの投稿ができるようなります
+* `GET /v1/comments` のレスポンスに `username(ユーザー名)` を追加
+* `POST /v1/comments` のリクエストパラメータに `isSigned(記名投稿フラグ)` を追加
+
+### 2017.03.13
+* OpenFRESH API 初稿公開
 
 
 ## Group 認証
@@ -87,6 +97,7 @@ $ curl -X POST \
             + id: `9eeff70f-6f0e-40b0-ae94-7ae34c38d2ae` (string, required) - コメントを識別する一意なID
             + type: user (string, required) - 投稿したユーザーの種別
             + freshId: 9999999 (string, required) - FRESH ID（ユーザーを識別するID）
+            + username: FRESH!さん (string) - ユーザー名
             + programId: 11111 (string, required) - 番組ID
             + millisecond: 10000 (number, required) - 番組開始から対象のコメント時間までの時間（ミリ秒）
             + raw: こんにちはこんにちは @フレッシュ (string, required) - コメント本文
@@ -121,6 +132,8 @@ $ curl -X POST \
 
         + programId: 11111 (string,required) - コメントを投稿する番組ID
         + comment: こんにちはこんにちは (required) - コメント内容
+        + isSigned: true (boolean) - コメントにユーザー名を記名するかどうか
+          + Default: false
 
 + Response 201 (application/json)
 
